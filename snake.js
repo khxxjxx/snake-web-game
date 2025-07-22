@@ -8,13 +8,7 @@ let food = {
     y: Math.floor(Math.random() * 20) * box
 };
 let score = 0;
-
-document.addEventListener('keydown', event => {
-    if (event.key === 'ArrowLeft' && direction !== 'RIGHT') direction = 'LEFT';
-    else if (event.key === 'ArrowUp' && direction !== 'DOWN') direction = 'UP';
-    else if (event.key === 'ArrowRight' && direction !== 'LEFT') direction = 'RIGHT';
-    else if (event.key === 'ArrowDown' && direction !== 'UP') direction = 'DOWN';
-});
+let game = null;
 
 function draw() {
     ctx.fillStyle = "#111";
@@ -34,6 +28,7 @@ function draw() {
     if (direction === 'UP') head.y -= box;
     if (direction === 'RIGHT') head.x += box;
     if (direction === 'DOWN') head.y += box;
+    else if (!direction) return; // 방향이 정해지지 않았으면 움직이지 않음
 
     // Game over conditions
     if (
@@ -64,4 +59,27 @@ function draw() {
     ctx.fillText("Score: " + score, 10, 390);
 }
 
-let game = setInterval(draw, 100);
+function startGame(e) {
+    if (!direction && ['ArrowLeft','ArrowUp','ArrowRight','ArrowDown'].includes(e.key)) {
+        if (e.key === 'ArrowLeft') direction = 'LEFT';
+        else if (e.key === 'ArrowUp') direction = 'UP';
+        else if (e.key === 'ArrowRight') direction = 'RIGHT';
+        else if (e.key === 'ArrowDown') direction = 'DOWN';
+        if (!game) game = setInterval(draw, 100);
+    }
+}
+
+document.addEventListener('keydown', e => {
+    if (['ArrowLeft','ArrowUp','ArrowRight','ArrowDown'].includes(e.key)) {
+        if (direction === null) {
+            startGame(e);
+        } else {
+            if (e.key === 'ArrowLeft' && direction !== 'RIGHT') direction = 'LEFT';
+            else if (e.key === 'ArrowUp' && direction !== 'DOWN') direction = 'UP';
+            else if (e.key === 'ArrowRight' && direction !== 'LEFT') direction = 'RIGHT';
+            else if (e.key === 'ArrowDown' && direction !== 'UP') direction = 'DOWN';
+        }
+    }
+});
+
+draw(); // 첫 화면만 그림, 게임은 방향키 입력 시 시작
