@@ -8,12 +8,14 @@
         body { display: flex; justify-content: center; align-items: center; height: 100vh; background: #222; }
         canvas { background: #111; display: block; margin: 0 auto; border: 2px solid #4caf50; }
         h1 { color: #4caf50; text-align: center; }
+        #restart { display: block; margin: 10px auto; padding: 8px 24px; font-size: 16px; background: #4caf50; color: #fff; border: none; border-radius: 5px; cursor: pointer; }
     </style>
 </head>
 <body>
     <div>
         <h1>Snake Game</h1>
         <canvas id="game" width="400" height="400"></canvas>
+        <button id="restart">재시작</button>
         <p style="color:#fff; text-align:center;">Use arrow keys to play!</p>
     </div>
     <script src="snake.js"></script>
