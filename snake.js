@@ -1,14 +1,19 @@
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 const box = 20;
-let snake = [{x: 9 * box, y: 10 * box}];
-let direction = null;
-let food = {
-    x: Math.floor(Math.random() * 20) * box,
-    y: Math.floor(Math.random() * 20) * box
-};
-let score = 0;
-let game = null;
+let snake, direction, food, score, game;
+
+function resetGame() {
+    snake = [{x: 9 * box, y: 10 * box}];
+    direction = null;
+    food = {
+        x: Math.floor(Math.random() * 20) * box,
+        y: Math.floor(Math.random() * 20) * box
+    };
+    score = 0;
+    if (game) clearInterval(game);
+    draw();
+}
 
 function draw() {
     ctx.fillStyle = "#111";
@@ -82,4 +87,8 @@ document.addEventListener('keydown', e => {
     }
 });
 
-draw(); // 첫 화면만 그림, 게임은 방향키 입력 시 시작
+document.getElementById('restart').onclick = function() {
+    resetGame();
+};
+
+resetGame(); // 최초 실행
