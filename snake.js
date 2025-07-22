@@ -1,7 +1,7 @@
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 const box = 20;
-let snake, direction, food, score, game;
+let snake, direction, food, score, game, gameOver;
 
 function resetGame() {
     snake = [{x: 9 * box, y: 10 * box}];
@@ -11,6 +11,7 @@ function resetGame() {
         y: Math.floor(Math.random() * 20) * box
     };
     score = 0;
+    gameOver = false;
     if (game) clearInterval(game);
     draw();
 }
@@ -41,7 +42,19 @@ function draw() {
         snake.some(segment => segment.x === head.x && segment.y === head.y)
     ) {
         clearInterval(game);
-        alert('Game Over! Your score: ' + score);
+        gameOver = true;
+        //alert('Game Over! Your score: ' + score); // alert 제거
+        setTimeout(() => {
+            ctx.fillStyle = "rgba(0,0,0,0.7)";
+            ctx.fillRect(0, 0, 400, 400);
+            ctx.fillStyle = "#fff";
+            ctx.font = "36px Arial";
+            ctx.fillText("Game Over!", 100, 200);
+            ctx.font = "24px Arial";
+            ctx.fillText("점수: " + score, 150, 240);
+            ctx.font = "18px Arial";
+            ctx.fillText("방향키를 누르면 재시작", 100, 280);
+        }, 50);
         return;
     }
 
@@ -76,7 +89,10 @@ function startGame(e) {
 
 document.addEventListener('keydown', e => {
     if (['ArrowLeft','ArrowUp','ArrowRight','ArrowDown'].includes(e.key)) {
-        if (direction === null) {
+        if (gameOver) {
+            resetGame();
+            startGame(e);
+        } else if (direction === null) {
             startGame(e);
         } else {
             if (e.key === 'ArrowLeft' && direction !== 'RIGHT') direction = 'LEFT';
